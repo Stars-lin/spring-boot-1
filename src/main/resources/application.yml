@@ -1,0 +1,33 @@
+#yml文件用来修改springboot配置信息
+
+spring:
+  #springmvc视图解析器
+  #mvc:
+   #view:
+    #prefix: / 
+    #suffix: .jsp
+    
+  #thymeleaf视图解析器
+  thymeleaf:
+    prefix: /
+    suffix: .html
+    
+  #dataSource
+  #datasource:
+    #type: com.alibaba.druid.pool.DruidDataSource
+    #driver-class-name: oracle.jdbc.Driver.OracleDriver
+    #url: jdbc:oracle:thin://localhost:1521/orcl
+    #username: scott
+    #password: scott
+    
+  #MysqldataSource
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shopweb?characterEncoding=utf-8
+    username: root
+    password: 
+    
+#properties文件格式
+#srping.mvc.view.prefix=/
+#spring.mvc.view.suffix=.jsp

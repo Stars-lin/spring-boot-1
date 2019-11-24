@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>搜索页面</title>
+
+		<link href="../AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css" />
+		<link href="../AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css" />
+
+		<link href="../basic/css/demo.css" rel="stylesheet" type="text/css" />
+
+		<link href="../css/seastyle.css" rel="stylesheet" type="text/css" />
+
+		<script type="text/javascript" src="../basic/js/jquery-1.7.min.js"></script>
+		<script type="text/javascript" src="../js/script.js"></script>
+	</head>
+
+	<body>
+            <div th:include="home/header :: header"></div>
+		
+			<b class="line"></b>
+           <div class="search">
+			<div class="search-list">
+			<div class="nav-table">
+					   <div class="long-title"><span class="all-goods">全部分类</span></div>
+					   <div class="nav-cont">
+							<ul>
+								<li class="index"><a href="#">首页</a></li>
+                                <li class="qc"><a href="#">闪购</a></li>
+                                <li class="qc"><a href="#">限时抢</a></li>
+                                <li class="qc"><a href="#">团购</a></li>
+                                <li class="qc last"><a href="#">大包装</a></li>
+							</ul>
+						    <div class="nav-extra">
+						    	<i class="am-icon-user-secret am-icon-md nav-user"></i><b></b>我的福利
+						    	<i class="am-icon-angle-right" style="padding-left: 10px;"></i>
+						    </div>
+						</div>
+			</div>
+			
+				
+					<div class="am-g am-g-fixed">
+						<div class="am-u-sm-12 am-u-md-12">
+	                  	
+							<div class="search-content">
+								<div class="clear"></div>
+
+								<ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 boxes">
+									<li th:each="shop : ${arr}">
+										<div class="i-pic limit" th:onclick="lookshop([[${shop.s_id}]])">
+											<img th:src="@{${shop.s_url}}" />									
+											<p class="title fl" th:text="${shop.s_name}"></p>
+											<p class="price fl">
+												<b>¥</b>
+												<strong th:text="${shop.s_price}"></strong>
+											</p>
+											<p class="number fl">
+												销量<span th:text="${shop.s_sales}"></span>
+											</p>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<script type="text/javascript">
+							   function lookshop(s_id){
+								   location.href = "/lookshop?s_id="+s_id;
+							   }
+							</script>
+							<!--
+							<div class="search-side">
+
+								<div class="side-title">
+									经典搭配
+								</div>
+
+								<li>
+									<div class="i-pic check">
+										<img src="../images/cp.jpg" />
+										<p class="check-title">萨拉米 1+1小鸡腿</p>
+										<p class="price fl">
+											<b>¥</b>
+											<strong>29.90</strong>
+										</p>
+										<p class="number fl">
+											销量<span>1110</span>
+										</p>
+									</div>
+								</li>
+								<li>
+									<div class="i-pic check">
+										<img src="../images/cp2.jpg" />
+										<p class="check-title">ZEK 原味海苔</p>
+										<p class="price fl">
+											<b>¥</b>
+											<strong>8.90</strong>
+										</p>
+										<p class="number fl">
+											销量<span>1110</span>
+										</p>
+									</div>
+								</li>
+								<li>
+									<div class="i-pic check">
+										<img src="../images/cp.jpg" />
+										<p class="check-title">萨拉米 1+1小鸡腿</p>
+										<p class="price fl">
+											<b>¥</b>
+											<strong>29.90</strong>
+										</p>
+										<p class="number fl">
+											销量<span>1110</span>
+										</p>
+									</div>
+								</li>
+
+							</div>
+							-->
+							<div class="clear"></div>
+							<!--分页 -->
+							<ul class="am-pagination am-pagination-right">
+								<li id="ret"><a th:href="@{/classify(pageNum=${pageNum-1},s_three_id=${s_three_id},like=${like})}">&laquo;</a></li>
+								<li name="lis" th:each="i : ${#numbers.sequence(1,number_tatol)}">
+								<a th:href="@{/classify(pageNum=${i},s_three_id=${s_three_id},like=${like})}" th:text="${i}"></a>
+								</li>
+								<li id="adv"><a th:href="@{/classify(pageNum=${pageNum+1},s_three_id=${s_three_id},like=${like})}">&raquo;</a></li>
+							</ul>
+							<script th:inline="javascript" type="text/javascript">
+							  $(function(){
+								  //获取页码
+								  var pagenow = [[${pageNum}]];
+								  //总页码值
+								  var pageall = [[${number_tatol}]];
+								  if(pagenow == 1){
+									  $("#ret").addClass("am-disabled");
+									  $("#adv").removeClass("am-disabled");
+								  }
+								  if(pagenow == pageall){
+									  $("#adv").addClass("am-disabled");
+									  $("#ret").removeClass("am-disabled");
+								  }
+								  
+								 $('[name="lis"]').each(function(){
+									 var i = Number($(this).children().text());
+									 if(i == pagenow){
+										 $(this).addClass("am-active");
+									 }
+								 });
+								  
+							  });
+							</script>
+
+						</div>
+					</div>
+					<div class="footer">
+						<div class="footer-hd">
+							<p>
+								<a href="#">卓鼎教育</a>
+								<b>|</b>
+								<a href="#">商城首页</a>
+								<b>|</b>
+								<a href="#">支付宝</a>
+								<b>|</b>
+								<a href="#">物流</a>
+							</p>
+						</div>
+						<div class="footer-bd">
+							<p style="text-align:center;">
+								<a href="#">合作伙伴</a>
+								<a href="#">联系我们</a>
+								<a href="#">网站地图</a>
+								<em style="text-align:center;">© 2015-2025 zking 版权所有</em>
+							</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		<!--引导 -->
+		<div class="navCir">
+			<li><a href="home2.jsp"><i class="am-icon-home "></i>首页</a></li>
+			<li><a href="sort.jsp"><i class="am-icon-list"></i>分类</a></li>
+			<li><a href="shopcart.jsp"><i class="am-icon-shopping-basket"></i>购物车</a></li>	
+			<li><a href="../person/index.jsp"><i class="am-icon-user"></i>我的</a></li>					
+		</div>
+
+		<!--菜单 -->
+		<div class=tip>
+			<div th:include="home/sidebar :: sidebar"></div>
+			<div id="prof-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					我
+				</div>
+			</div>
+			<div id="shopCart-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					购物车
+				</div>
+			</div>
+			<div id="asset-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					资产
+				</div>
+
+				<div class="ia-head-list">
+					<a href="#" target="_blank" class="pl">
+						<div class="num">0</div>
+						<div class="text">优惠券</div>
+					</a>
+					<a href="#" target="_blank" class="pl">
+						<div class="num">0</div>
+						<div class="text">红包</div>
+					</a>
+					<a href="#" target="_blank" class="pl money">
+						<div class="num">￥0</div>
+						<div class="text">余额</div>
+					</a>
+				</div>
+
+			</div>
+			<div id="foot-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					足迹
+				</div>
+			</div>
+			<div id="brand-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					收藏
+				</div>
+			</div>
+			<div id="broadcast-content" class="nav-content">
+				<div class="nav-con-close">
+					<i class="am-icon-angle-right am-icon-fw"></i>
+				</div>
+				<div>
+					充值
+				</div>
+			</div>
+		</div>
+		<script>
+			window.jQuery || document.write('<script src="basic/js/jquery-1.9.min.js"><\/script>');
+		</script>
+		<script type="text/javascript" src="../basic/js/quick_links.js"></script>
+
+<div class="theme-popover-mask"></div>
+
+	</body>
+
+</html>

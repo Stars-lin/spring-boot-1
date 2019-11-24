@@ -1,0 +1,238 @@
+﻿<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+
+		<title>个人资料</title>
+
+		<link href="../AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css">
+		<link href="../AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css">
+
+		<link href="../css/personal.css" rel="stylesheet" type="text/css">
+		<link href="../css/infstyle.css" rel="stylesheet" type="text/css">
+		<script src="../AmazeUI-2.4.2/assets/js/jquery.min.js"></script>
+		<script src="../AmazeUI-2.4.2/assets/js/amazeui.js"></script>
+
+		<link rel="stylesheet" href="../css/laydate.css" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/laydate.js"></script>
+		<style type="text/css">
+			.select-date {
+				font-family: "sta cartman"
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<!--头 -->
+		<header>
+			<article>
+				<div th:include="home/header :: header"></div>
+			</article>
+		</header>
+		<div class="nav-table">
+			<div class="long-title">
+				<span class="all-goods">全部分类</span>
+			</div>
+			<div class="nav-cont">
+				<ul>
+					<li class="index">
+						<a href="#">首页</a>
+					</li>
+					<li class="qc">
+						<a href="#">闪购</a>
+					</li>
+					<li class="qc">
+						<a href="#">限时抢</a>
+					</li>
+					<li class="qc">
+						<a href="#">团购</a>
+					</li>
+					<li class="qc last">
+						<a href="#">大包装</a>
+					</li>
+				</ul>
+				<div class="nav-extra">
+					<i class="am-icon-user-secret am-icon-md nav-user"></i><b></b>我的福利 <i class="am-icon-angle-right" style="padding-left: 10px;"></i>
+				</div>
+			</div>
+		</div>
+		<b class="line"></b>
+		<div class="center">
+			<div class="col-main">
+				<div class="main-wrap">
+
+					<div class="user-info">
+						<!--标题 -->
+						<div class="am-cf am-padding">
+							<div class="am-fl am-cf">
+								<strong class="am-text-danger am-text-lg">个人资料</strong> / <small>Personal&nbsp;information</small>
+							</div>
+						</div>
+						<hr />
+
+						<form class="am-form am-form-horizontal" action="/update" method="post" enctype="multipart/form-data">
+						<!--头像 -->
+						<div class="user-infoPic">
+
+							<div class="filePic">
+								<input type="file" id="upload" class="inputPic" allowexts="gif,jpeg,jpg,png,bmp"  accept="image/*" name="url"> <img id="preview" style="height: 100px ;margin-top: -8px" class="am-circle am-img-thumbnail" th:src="${session.user.u_url}" alt="" />
+							</div>
+							<p class="am-form-help">头像</p>
+
+							<div class="info-m">
+								<div>
+									<b>用户名：<i th:text="${session.user.u_nickname}"></i></b>
+								</div>
+								<div class="vip">
+									<span></span>
+									<a href="#">会员专享</a>
+								</div>
+							</div>
+						</div>
+
+						<!--个人信息 -->
+						<div class="info-main">
+								<input type="hidden" name="u_id" th:value="${session.user.u_id}">
+								<div class="am-form-group">
+									<label for="user-name2" class="am-form-label">昵称</label>
+									<div class="am-form-content">
+										<input type="text" name="u_nickname"  id="user-name2" th:value="${session.user.u_nickname}">
+										<small >昵称长度不能超过40个汉字</small>
+									</div>
+								</div>
+
+								<div class="am-form-group">
+									<label for="user-name" class="am-form-label">姓名</label>
+									<div class="am-form-content">
+										<input type="text" name="u_name" id="user-name2" th:value="${session.user.u_name}">
+
+									</div>
+								</div>
+
+								<div class="am-form-group">
+									<label class="am-form-label">性别</label>
+									<div class="am-form-content sex" >
+										<label class="am-radio-inline">
+											<input type="radio" th:checked="${session.user.u_sex eq '男' ? true:false }" name="u_sex" value="男" data-am-ucheck> 男
+									</label> <label class="am-radio-inline">
+										<input type="radio"th:checked="${session.user.u_sex eq '女' ? true:false }" name="u_sex" value="女" data-am-ucheck> 女
+									</label> <label class="am-radio-inline"> <input type="radio"
+										name="u_sex" th:checked="${session.user.u_sex eq '保密' ? true:false }" value="保密" data-am-ucheck> 保密
+									</label>
+									</div>
+								</div>
+
+								<div class="am-form-group">
+									<label for="user-birth" class="am-form-label">生日</label>
+									<div class="laydate-box" style="position: absolute; top: 380px; left: -20px;">
+										<input type="text" id="laydateInput"/>
+										<img src="images/calendar.png" alt="" class="icon data-icon" />
+										<div class="select-date">
+											<div class="select-date-header">
+												<ul class="heade-ul" >
+													<li class="header-item header-item-one">
+														<select name="BirthYear" id="yearList">
+														</select>
+													</li>
+													<li class="header-item header-item-two" onselectstart="return false">
+														<select name="BirThMonth"  id="monthList"></select>
+													</li>
+													<li class="header-item header-item-three" onselectstart="return false">
+														<span class="reback">回到今天</span>
+													</li>
+												</ul>
+											</div>
+											<div class="select-date-body">
+												<ul class="week-list">
+													<li>日</li>
+													<li>一</li>
+													<li>二</li>
+													<li>三</li>
+													<li>四</li>
+													<li>五</li>
+													<li>六</li>
+												</ul>
+												<ul class="day-tabel"></ul>
+											</div>
+										</div>
+									</div>
+									<!--<div class="am-form-content birth">
+									<div class="birth-select">
+										<select data-am-selected>
+											<option value="a">2015</option>
+											<option value="b">1987</option>
+										</select> <em>年</em>
+									</div>
+									<div class="birth-select2">
+										<select data-am-selected>
+											<option value="a">12</option>
+											<option value="b">8</option>
+										</select> <em>月</em>
+									</div>
+									<div class="birth-select2">
+										<select data-am-selected>
+											<option value="a">21</option>
+											<option value="b">23</option>
+										</select> <em>日</em>
+									</div>
+								</div>-->
+
+								</div>
+								<div class="am-form-group">
+									<label for="user-phone" class="am-form-label">电话</label>
+									<div class="am-form-content">
+										<input id="user-phone" name="u_phone" th:value="${session.user.u_phone}" type="tel">
+									</div>
+								</div>
+								<div class="am-form-group">
+									<label for="user-email" class="am-form-label">电子邮件</label>
+									<div class="am-form-content">
+										<input id="user-email" name="u_email" th:value="${session.user.u_email}" type="email">
+									</div>
+								</div>
+								<div class="info-btn">
+										<input class="am-btn am-btn-danger" value="保存修改" type="submit"/>
+								</div>
+
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+				<!--底部-->
+				<div class="footer">
+					<div class="footer-hd">
+						<p>
+							<a href="#">卓鼎教育</a> <b>|</b>
+							<a href="#">商城首页</a> <b>|</b>
+							<a href="#">支付宝</a> <b>|</b>
+							<a href="#">物流</a>
+						</p>
+					</div>
+					<div class="footer-bd">
+						<p style="text-align: center;">
+							<a href="#">合作伙伴</a>
+							<a href="#">联系我们</a>
+							<a href="#">网站地图</a> <em style="text-align: center;">© 2015-2025 zking 版权所有</em>
+						</p>
+					</div>
+				</div>
+			</div>
+		<div th:include="person/sidebar :: sidebar"></div>
+		</div>
+
+	</body>
+<!--	图片预览-->
+	<script type="text/javascript">
+		$('#upload').change(function(){
+			var imageFile = document.getElementById('upload').files[0];//image file对象
+			var src = window.URL.createObjectURL(imageFile);//获取图片地址
+			//alert(src);
+			document.getElementById('preview').src = src;//为图片src赋值
+		});
+	</script>
+</html></html>

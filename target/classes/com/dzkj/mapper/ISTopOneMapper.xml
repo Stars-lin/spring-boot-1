@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.ISTopOneMapper">
+<resultMap type="com.dzkj.pojo.STopOne" id="STopOnemap">
+  <id property="s_one_id" column="s_one_id"/>
+  <result property="s_one_name" column="s_one_name"/>
+  <result property="s_one_img" column="s_one_img"/>
+  <collection column="s_one_id" property="sTwos" ofType="com.dzkj.pojo.STopTwo" select="com.dzkj.mapper.ISTopTwoMapper.checktwo">
+  </collection>
+</resultMap>
+
+<select id="findAll" resultMap="STopOnemap">
+  select * from s_top_one
+</select>
+</mapper>

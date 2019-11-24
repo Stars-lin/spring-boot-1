@@ -1,0 +1,137 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+
+<title>我的收藏</title>
+
+<link href="../AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet"
+	type="text/css">
+<link href="../AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet"
+	type="text/css">
+
+<link href="../css/personal.css" rel="stylesheet" type="text/css">
+<link href="../css/colstyle.css" rel="stylesheet" type="text/css">
+<script src="../AmazeUI-2.4.2/assets/js/jquery.min.js"></script>
+		<script src="../AmazeUI-2.4.2/assets/js/amazeui.min.js"></script>
+</head>
+
+<body>
+	<!--头 -->
+	<div th:include="home/header :: header"></div>
+	<div class="nav-table">
+		<div class="long-title">
+			<span class="all-goods">全部分类</span>
+		</div>
+		<div class="nav-cont">
+			<ul>
+				<li class="index"><a href="#">首页</a></li>
+				<li class="qc"><a href="#">闪购</a></li>
+				<li class="qc"><a href="#">限时抢</a></li>
+				<li class="qc"><a href="#">团购</a></li>
+				<li class="qc last"><a href="#">大包装</a></li>
+			</ul>
+			<div class="nav-extra">
+				<i class="am-icon-user-secret am-icon-md nav-user"></i><b></b>我的福利 <i
+					class="am-icon-angle-right" style="padding-left: 10px;"></i>
+			</div>
+		</div>
+	</div>
+	<b class="line"></b>
+	<div class="center">
+		<div class="col-main">
+			<div class="main-wrap">
+
+				<div class="user-collection">
+					<!--标题 -->
+					<div class="am-cf am-padding">
+						<div class="am-fl am-cf">
+							<strong class="am-text-danger am-text-lg">我的收藏</strong> / <small>My&nbsp;Collection</small>
+						</div>
+					</div>
+					<hr />
+
+					<div class="you-like">
+						<div class="s-content">
+							<div class="s-item-wrap" th:each="collection:${collections}">
+								<div class="s-item">
+                                   <input name="s_id" type="hidden" th:value="${collection.commodity.s_id}">
+									<div class="s-pic">
+										<a th:href="@{/lookshop(s_id=${collection.commodity.s_id})}" class="s-pic-link"> <img
+											th:src="@{${collection.commodity.s_url}}"
+											alt="包邮s925纯银项链女吊坠短款锁骨链颈链日韩猫咪银饰简约夏配饰"
+											title="包邮s925纯银项链女吊坠短款锁骨链颈链日韩猫咪银饰简约夏配饰"
+											class="s-pic-img s-guess-item-img">
+										</a>
+									</div>
+									<div class="s-info">
+										<div class="s-title">
+											<a th:href="@{/lookshop(s_id=${collection.commodity.s_id})}" title="包邮s925纯银项链女吊坠短款锁骨链颈链日韩猫咪银饰简约夏配饰" th:text="${collection.commodity.s_name}">包邮s925纯银项链女吊坠短款锁骨链颈链日韩猫咪银饰简约夏配饰</a>
+										</div>
+										<div class="s-price-box">
+											<span class="s-price"><em class="s-price-sign">¥</em><em
+												class="s-value" th:text="${collection.commodity.s_price}">42.50</em></span>
+										</div>
+										<div class="s-extra-box">
+											 <span
+												class="s-sales" th:text="'月销:'+${collection.commodity.s_sales}">月销: 219</span>
+										</div>
+									</div>
+									<div class="s-tp">
+										<span class="ui-btn-loading-before">找相似</span> <i
+											class="am-icon-shopping-cart"></i> 
+											<span name="add" class="ui-btn-loading-before buy">加入购物车</span>
+										<p>
+											<a href="javascript:;" class="c-nodo J_delFav_btn">取消收藏</a>
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<script type="text/javascript">
+						  $("[name='add']").each(function(){
+							  $(this).click(function(){
+								  var s_id = $(this).parents(".s-item-wrap").find("[name='s_id']").val();
+								  alert(s_id);
+								  $.post("/addcar",{"s_id":s_id,"number":1},function(data){
+									  if(data){
+										  alert("添加成功");
+									  }
+								  })
+							  })
+						  })
+						</script>
+
+					</div>
+
+				</div>
+
+			</div>
+			<!--底部-->
+			<div class="footer">
+				<div class="footer-hd">
+					<p>
+						<a href="#">卓鼎教育</a> <b>|</b> <a href="#">商城首页</a> <b>|</b> <a
+							href="#">支付宝</a> <b>|</b> <a href="#">物流</a>
+					</p>
+				</div>
+				<div class="footer-bd">
+					<p style="text-align: center;">
+						<a href="#">合作伙伴</a> <a href="#">联系我们</a> <a href="#">网站地图</a> <em
+							style="text-align: center;">© 2015-2025 zking 版权所有</em>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div th:include="person/sidebar :: sidebar"></div>
+	</div>
+
+</body>
+
+</html>

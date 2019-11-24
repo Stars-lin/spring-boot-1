@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.ICollectionMapper">
+<resultMap type="com.dzkj.pojo.Collection" id="collectionmap">
+    <id column="c_id" property="c_id"/>
+    <result column="u_id" property="u_id"/>
+    <association property="commodity" column="s_id" select="com.dzkj.mapper.ICommodityMapper.findbyid"></association>
+  </resultMap>
+  <select id="findbyu_id" resultMap="collectionmap">
+    select * from collection a,commodity b where a.u_id=#{u_id} and a.s_id=b.s_id
+  </select>
+  <select id="findone" resultMap="collectionmap">
+    select * from collection a,commodity b where a.u_id=#{u_id} and a.s_id=#{commodity.s_id} and a.s_id=b.s_id
+  </select>
+  <insert id="add">
+    insert into collection values(null,#{u_id},#{commodity.s_id})
+  </insert>
+</mapper>

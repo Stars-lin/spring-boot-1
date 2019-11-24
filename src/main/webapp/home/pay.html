@@ -1,0 +1,494 @@
+﻿
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>结算页面</title>
+
+<link href="../AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet"
+	type="text/css" />
+
+<link href="../basic/css/demo.css" rel="stylesheet" type="text/css" />
+<link href="../css/cartstyle.css" rel="stylesheet" type="text/css" />
+
+<link href="../css/jsstyle.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../js/address.js"></script>
+<script type="text/javascript">
+		$(function(){
+			 $("[name=defa]").each(function(){
+				if($(this).val() == 1){
+					$(this).parent().addClass("user-addresslist defaultAddr");
+					$(this).nextAll("div").children(".setDef").text("");
+					$(this).nextAll("div").children(".new-addr-bar").text("");
+				}else{
+					$(this).nextAll("div").children(".setDef").text("设为默认");
+					$(this).nextAll("div").children(".new-addr-bar").text("|");
+					$(this).parent().removeClass("defaultAddr");
+				} 
+			});
+			 
+			
+			 /* $(".theme-popover-mask").attr("theme-popover-mask")
+			 $(".theme-popover").attr("theme-popover") */
+			
+		});
+						
+	</script>
+</head>
+
+<body>
+
+	<div th:include="home/header :: header"></div>
+
+	<div class="clear"></div>
+	<div class="concent">
+		<!--地址 -->
+		<div class="paycont">
+			<div class="address">
+				<h3>确认收货地址</h3>
+				<div class="clear"></div>
+				
+				<ul class="am-avg-sm-1 am-avg-md-3 am-thumbnails" th:if="${add == '请先添加地址'}">
+					<input type="hidden" th:value="2"  name="defa">
+						<center style="color: red; font-size: 25px;"   th:text="${add}"></center>
+				</ul>
+					
+				<ul th:if="${add != '请先添加地址'}" >
+					<div class="per-border"></div>
+					<li class="user-addresslist" th:each="address:${add}" name="addresslist">
+						<input type="hidden" class="a_def" th:value="${address.a_status}"  name="defa">
+						<input type="hidden" class="a_id" th:value="${address.a_id}" name="addressida">
+						<div class="address-left">
+							<div class="user DefaultAddr">
+								<span class="buy-address-detail"> <span class="buy-user" th:text="${address.a_consigneename}" name="u_name">
+								</span> <span class="buy-phone" th:text="${address.a_phone}" name="u_phone">15877777777</span>
+								</span>
+							</div>
+							<div class="default-address DefaultAddr">
+								<span class="buy-line-title buy-line-title-type">收货地址：</span> <span
+									class="buy--address-detail"> <span class="province" th:text="${address.a_province}">湖北</span>省
+									<span class="city" th:text="${address.a_city}">武汉</span> <span class="dist" th:text="${address.a_area}">武昌</span> <span
+									class="street" th:text="${address.a_details}">东湖路75号众环大厦9栋9层999</span>
+								</span> </span>
+							</div>
+							<ins class="deftip hidden">默认地址</ins>
+						</div>
+						<div class="address-right">
+							<span class="am-icon-angle-right am-icon-lg"></span>
+						</div>
+						<div class="clear"></div>
+
+						<div class="new-addr-btn">
+							<span class="setDef" name="setDef"></span> 
+							 <span class="new-addr-bar"></span> <a
+								href="javascript:void(0);" onclick="delClick(this);">删除</a>
+						</div>
+						<script type="text/javascript">
+							$("[name=setDef]").mouseover(function(){
+								$(this).css("cursor","Pointer");
+							});
+							
+							$("[name=setDef]").click(function(){
+								var addressid = $(this).parent().prevAll("input").val();
+								$(this).parent().prevAll("input").prev().val("1");
+								var def = $(this).parent().prevAll("input").prev().val();
+								$.post("def",{"addressid":addressid,"def":def}); /* 将地址改为默认 */
+								$(this).text("");
+								$(this).next().text("");
+								$("[name=addressida]").each(function(){
+									if($(this).val() != addressid){
+										var addressid2 = $(this).val();
+										$(this).prev().val("0");
+										var def2 = $(this).prev().val();
+										$(this).nextAll("div").children(".setDef").text("设为默认");
+										$(this).nextAll("div").children(".new-addr-bar").text("|")
+										$.post("def",{"addressid":addressid2,"def":def2});
+									}
+								});
+							});
+						</script>
+					</li>
+				</ul>
+
+				<div class="clear"></div>
+			</div>
+
+			<!--支付方式-->
+			<div class="logistics" >
+				<h3>选择支付方式</h3>
+				<ul class="pay-list" >
+					<li class="pay taobao" id="zfb"><img src="../images/zhifubao.jpg" />支付宝<span></span></li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+			<!--订单 -->
+			<div class="concent">
+				<div id="payTable">
+					<h3>确认订单信息</h3>
+					<div class="cart-table-th">
+						<div class="wp">
+
+							<div class="th th-item">
+								<div class="td-inner">商品信息</div>
+							</div>
+							<div class="th th-price">
+								<div class="td-inner">单价</div>
+							</div>
+							<div class="th th-amount">
+								<div class="td-inner">数量</div>
+							</div>
+							<div class="th th-sum">
+								<div class="td-inner">金额</div>
+							</div>
+						</div>
+					</div>
+					<div class="clear"></div>
+
+					<tr class="item-list">
+						<div class="bundle  bundle-last">
+
+					</tr>
+					<div class="clear"></div>
+				</div>
+
+				<tr id="J_BundleList_s_1911116345_1" class="item-list">
+					<div id="J_Bundle_s_1911116345_1_0" class="bundle  bundle-last">
+						<div class="bundle-main">
+							<ul class="item-content clearfix" th:each="order:${orderall.oAbouts}">
+								<div class="pay-phone">
+									<li class="td td-item">
+										<div class="item-pic">
+											<a href="#" class="J_MakePoint"> <img
+												th:src="@{${order.commodity.s_url}}"
+												class="itempic J_ItemImg" style="width: 100px;height: 100px"></a>
+										</div>
+										<div class="item-info">
+											<div class="item-basic-info">
+												<a href="#" target="_blank"  class="item-title J_MakePoint" data-point="tbcart.8.11" th:text="${order.commodity.s_name}"></a>
+											</div>
+										</div>
+									</li>
+									<li class="td td-info">
+											<div class="item-props">
+												<span class="sku-line"></span>
+											</div>
+									</li>
+									<li class="td td-price">
+										<div class="item-price price-promo-promo">
+											<div class="price-content">
+												<em class="J_Price price-now" th:text="${order.commodity.s_price}" name="s_price"></em>
+											</div>
+										</div>
+									</li>
+								</div>
+
+								<li class="td td-amount">
+									<div class="amount-wrapper ">
+										<div class="item-amount ">
+											<span class="phone-title">购买数量</span>
+											<div class="sl" >
+												<em class="J_Price price-now" th:text="${order.sc_number}"></em>
+											</div>
+								
+										</div>
+									</div>
+								</li>
+								<li class="td td-sum">
+									<div class="td-inner">
+										<em tabindex="0" class="J_ItemSum number" th:text="${order.sc_price}" name="sc_price"></em>
+									</div>
+								</li>
+									
+							</ul>
+							<div class="clear"></div>
+															
+						</div>
+				</tr>
+			</div>
+			<div class="clear"></div>
+			<div class="pay-total">
+				<!--留言-->
+				<div class="order-extra">
+					<div class="order-user-info">
+						<div id="holyshit257" class="memo">
+							<label>买家留言：</label> <input type="text"
+								title="选填,对本次交易的说明（建议填写已经和卖家达成一致的说明）"
+								placeholder="选填,建议填写和卖家达成一致的说明"
+								class="memo-input J_MakePoint c2c-text-default memo-close">
+							<div class="msg hidden J-msg">
+								<p class="error">最多输入500个字符</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!--含运费小计 -->
+			<div class="buy-point-discharge ">
+				<p class="price g_price ">
+					合计 <span>¥</span><em class="pay-sum" id="total" ></em>
+				</p>
+			</div>
+				
+			<!--信息 -->
+			<div class="order-go clearfix">
+				<div class="pay-confirm clearfix">
+					<div class="box">
+						<div tabindex="0" id="holyshit267" class="realPay">
+							<em class="t">实付款：</em> <span class="price g_price "> <span>¥</span>
+								<em class="style-large-bold-red " id="J_ActualFee"></em>
+							</span>
+						</div>
+						<script type="text/javascript">
+							$(function(){
+								var number=0;
+								$("[name=sc_price]").each(function(){
+									number += Number($(this).text());
+									
+								});
+								$("#total").text(number);
+								$("#J_ActualFee").text(number);
+							});
+						</script>
+						<div id="holyshit268" class="pay-address" th:if="${add == '请先添加地址'}">
+						</div>
+						<div th:if="${add != '请先添加地址'}">
+							<div id="holyshit268" class="pay-address" th:each="address:${add}" th:if="${address.a_status == 1}">
+								
+								<p class="buy-footer-address" >
+									<span class="buy-line-title buy-line-title-type">寄送至：</span>
+									    <input type="hidden" class="id" th:value="${address.a_id}"/>
+									    <span
+										class="buy--address-detail"> <span class="province" th:text="${address.a_province}" id="provinc"></span>省
+										<span class="city" th:text="${address.a_city}" id="city"></span> <span class="dist" th:text="${address.a_area}" id="dist"></span><span
+										class="street" th:text="${address.a_details}" id="street">/span>
+									</span> </span>
+								</p>
+								<p class="buy-footer-address">
+									<span class="buy-line-title" >收货人：</span> <span
+										class="buy-address-detail" > <span class="buy-user" th:text="${address.a_consigneename}" id="name"></span> 
+										<span class="buy-phone" th:text="${address.a_phone}" id="ophone"></span>
+									</span>
+								</p>
+								
+							</div>
+						</div>
+					</div>
+
+					<div id="holyshit269" class="submitOrder">
+						<div class="go-btn-wrap">
+							<a id="J_Go" href="#" class="btn-go" tabindex="0"
+								title="点击此按钮，提交订单">提交订单</a>
+						</div>
+					</div>
+					<script th:inline="javascript" type="text/javascript">
+						
+						var del;
+						$("[name=del]").click(function(){
+							del = $(this).parents("li");
+							var addressid = $(this).parent().prevAll(".a_id").val();
+							if(confirm("是否确认删除")){
+								$.post("delAddress",{"addressid":addressid},function(data){
+									if(data > 0){
+										$(del).remove();
+										location.href="#";
+									}else{
+										alert("网络异常");
+									}
+								});
+							}
+						});
+						
+						//提交按鈕
+						 $("#J_Go").click(function(){
+								var val =  $("#zfb").attr("class");
+								var add = [[${add}]];
+								var a_id = $(".id").val();
+								var o_bh = [[${orderall.oTotal.o_bh}]];
+								if(add == "请先添加地址"){
+									alert(add);
+									location.href = "/dz";
+									return;
+								}
+								if(val != "pay taobao selected"){
+									alert("请先选择支付方式");
+								}else{
+									 location.href = "payment?a_id="+a_id+"&&o_bh="+o_bh;
+								}
+							}); 
+						
+						$("[name=addresslist]").click(function(){
+							var id = $(this).find("[name='addressida']").val();
+							var user = $(this).children().children().children().find(".buy-user").text();
+							var phone = $(this).children().children().children().find(".buy-phone").text();
+							var province = $(this).children().children().children().find(".province").text();
+							var city = $(this).children().children().children().find(".city").text();
+							var dist = $(this).children().children().children().find(".dist").text();
+							var street = $(this).children().children().children().find(".street").text();
+							
+							$("#holyshit268").children().find(".id").val(id);
+							$("#holyshit268").children().children().find(".province").text(province);
+							$("#holyshit268").children().children().find(".city").text(city);
+							$("#holyshit268").children().children().find(".dist").text(dist);
+							$("#holyshit268").children().children().find(".street").text(street);
+							$("#holyshit268").children().children().find(".buy-user").text(user);
+							$("#holyshit268").children().children().find(".buy-phone").text(phone);
+						});
+						
+						
+						
+					</script>
+					
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+	</div>
+	<div class="footer">
+		<div class="footer-hd">
+			<p>
+				<a href="#">卓鼎教育</a> <b>|</b> <a href="#">商城首页</a> <b>|</b> <a
+					href="#">支付宝</a> <b>|</b> <a href="#">物流</a>
+			</p>
+		</div>
+		<div class="footer-bd">
+			<p style="text-align: center;">
+				<a href="#">合作伙伴</a> <a href="#">联系我们</a> <a href="#">网站地图</a> <em
+					style="text-align: center;">© 2015-2025 zking 版权所有</em>
+			</p>
+		</div>
+	</div>
+	</div>
+	<div class="theme-popover-mask"></div>
+	<div class="theme-popover">
+		<!--标题 -->
+		<div class="am-cf am-padding">
+			<div class="am-fl am-cf">
+				<strong class="am-text-danger am-text-lg">新增地址</strong> / <small>Add
+					address</small>
+			</div>
+		</div>
+		<hr />
+
+		<div class="am-u-md-12">
+			<form class="am-form am-form-horizontal" >
+
+				<div class="am-form-group">
+					<label for="user-name" class="am-form-label">收货人</label>
+					<div class="am-form-content">
+						<input type="text" id="user-name" placeholder="收货人">
+					</div>
+				</div>
+
+				<div class="am-form-group">
+					<label for="user-phone" class="am-form-label">手机号码</label>
+					<div class="am-form-content">
+						<input id="user-phone" placeholder="手机号必填" type="email">
+					</div>
+				</div>
+
+				<div class="am-form-group">
+					<label for="user-address" class="am-form-label">所在地</label>
+					<div class="am-form-content address">
+						<select name="province" id="province">
+							<option value="请选择">请选择</option>
+						</select>
+						<select name="city" id="city">
+							<option value="请选择">请选择</option>
+						</select>
+						<select name="dist" id="town">
+							<option value="请选择">请选择</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="am-form-group">
+					<label for="user-intro" class="am-form-label">详细地址</label>
+					<div class="am-form-content">
+						<textarea class="" rows="3" id="user-intro"  placeholder="输入详细地址"></textarea>
+						<small>100字以内写出你的详细地址...</small>
+					</div>
+					<center><p id="error" style="color: red;"></p></center>
+				</div>
+				
+				<div class="am-form-group theme-poptit">
+					<div class="am-u-sm-9 am-u-sm-push-3">
+						<div class="am-btn am-btn-danger" id="add">保存</div>
+						<input type="button" class="am-btn am-btn-danger close" id="cancel" value="取消">
+					</div>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			$("#user-phone").blur(function(){
+				var reg = /0?(13|14|15|18|17)[0-9]{9}$/;
+				var phone = $(this).val();
+				if(!reg.test(phone)){
+					$(this).val("");
+					$(this).css("border-color","red");
+					$(this).attr("placeholder","请输入正确的手机号码");
+				}else {
+					$(this).css("border-color","#fff");
+				}
+			});
+			
+			$("#user-name").blur(function(){
+				if($(this) != null) {
+					$("#error").text("");
+					$(this).css("border-color","#fff");
+				}
+			});
+			
+			$("[name=u_intro]").blur(function(){
+				if($(this) != null) {
+					$("#error").text("");
+					$(this).css("border-color","#fff");
+				}
+			});
+			
+			$("#add").click(function(){
+				var user = $("#user-name").val();
+				var intro = $("#user-intro").val();
+				var phone = $("#user-phone").val();
+				var province = $("#province").val();
+				var city = $("#city").val();
+				var dist = $("#town").val();
+				if(user == ""){
+					$("#error").text("请输入收货人");
+					$("#user-name").css("border-color","red");
+				}else if(intro == ""){
+					alert(intro);
+					$("#error").text("请输入详细地址");
+					$("#user-intro").css("border-color","red");
+				}else if(phone == ""){
+					$("#error").text("请输入手机号码");
+					$("#user-phone").css("border-color","red");
+				}else{
+					$.post("skip",{"aname":user,"aphone":phone,"province":province,"city":city,"dist":dist,"street":intro},function(data){
+						if(data > 0){
+							 location.href="paypage";
+						}else{
+							$("#error").text("地址不能超过三个");
+						}
+					});
+				}
+			});
+		</script>
+
+	</div>
+
+	<div class="clear"></div>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="../js/area.js"></script>
+<script src="../js/select.js"></script>
+</body>
+
+</html>

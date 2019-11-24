@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.IUserMapper">
+  <select id="login" resultType="com.dzkj.pojo.User">
+    select * from user where (u_nickname=#{name} or u_phone=#{name} or u_email=#{name}) and u_pwd=#{pwd}
+  </select>
+</mapper>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+  <div th:fragment="sidebar">
+    <div id="sidebar">
+			<div id="wrap">
+				<div id="prof" class="item">
+					<a id="user" href="#"> <span class="setting"></span>
+					</a>
+					<div class="ibar_login_box status_login">
+						<div class="avatar_box" th:if="${user}!=null">
+							<p class="avatar_imgbox" >
+								<img th:src="@{'/'+${session.user.u_url}}" />
+							</p>
+							<ul class="user_info">
+								<li th:text="'用户名：'+${session.user.u_nickname}">sl1903</li>
+							</ul>
+						</div>
+						<div class="avatar_box " th:if="${user}==null">
+								<p class="avatar_imgbox "><img src="../images/no-img_mid_.jpg " /></p>
+								<ul class="user_info ">
+									<li>用户名：sl1903</li>
+									<li>级&nbsp;别：普通会员</li>
+								</ul>
+							</div>
+						<div class="login_btnbox">
+							<a href="#" class="login_order">我的订单</a> 
+							<a href="#" class="login_favorite">我的收藏</a>
+						</div>
+						<i class="icon_arrow_white"></i>
+					</div>
+
+				</div>
+				<div id="shopCart" class="item">
+					<a id="shopcart" href="#"> <span class="message"></span>
+					</a>
+					<p>购物车</p>
+				</div>
+				<div id="asset" class="item">
+					<a href="#"> <span class="view"></span>
+					</a>
+					<div class="mp_tooltip">
+						我的资产 <i class="icon_arrow_right_black"></i>
+					</div>
+				</div>
+
+				<div id="foot" class="item">
+					<a id="foot" href="#"> <span class="zuji"></span>
+					</a>
+					<div class="mp_tooltip">
+						我的足迹 <i class="icon_arrow_right_black"></i>
+					</div>
+				</div>
+
+				<div id="brand" class="item">
+					<a id="collection" href="#"> <span class="wdsc"><img
+							src="../images/wdsc.png" /></span>
+					</a>
+					<div class="mp_tooltip">
+						我的收藏 <i class="icon_arrow_right_black"></i>
+					</div>
+				</div>
+
+				<div id="broadcast" class="item">
+					<a href="#"> <span class="chongzhi"><img
+							src="../images/chongzhi.png" /></span>
+					</a>
+					<div class="mp_tooltip">
+						我要充值 <i class="icon_arrow_right_black"></i>
+					</div>
+				</div>
+
+				<div class="quick_toggle">
+					<li class="qtitem"><a href="#"><span class="kfzx"></span></a>
+						<div class="mp_tooltip">
+							客服中心<i class="icon_arrow_right_black"></i>
+						</div></li>
+					<!--二维码 -->
+					<li class="qtitem"><a href="#none"><span
+							class="mpbtn_qrcode"></span></a>
+						<div class="mp_qrcode" style="display: none;">
+							<img src="../images/weixin_code_145.png" /><i
+								class="icon_arrow_white"></i>
+						</div></li>
+					<li class="qtitem"><a href="#top" class="return_top"><span
+							class="top"></span></a></li>
+				</div>
+
+				<!--回到顶部 -->
+				<div id="quick_links_pop" class="quick_links_pop hide"></div>
+
+			</div>
+
+		</div>
+		<script th:inline="javascript" type="text/javascript">
+    var user = [[${session.user}]];
+    $("#user").click(function(){
+    		if(user == null){
+				  alert("请先登录");
+				  location.href = "/home/login";
+			  }else{
+				  location.href = "/information";
+			  }
+    });
+    $(".login_order").click(function(){
+		if(user == null){
+			  alert("请先登录");
+			  location.href = "/home/login";
+		  }else{
+			  location.href = "/orderinfo";
+		  }
+    });
+    $(".login_favorite").click(function(){
+		if(user == null){
+			  alert("请先登录");
+			  location.href = "/home/login";
+		  }else{
+			  location.href = "/collection";
+		  }
+    });
+    $("#shopcart").click(function(){
+		if(user == null){
+			  alert("请先登录");
+			  location.href = "/home/login";
+		  }else{
+			  location.href = "/shopcar";
+		  }
+    });
+    $("#foot").click(function(){
+		if(user == null){
+			  alert("请先登录");
+			  location.href = "/home/login";
+		  }else{
+			  location.href = "/foot";
+		  }
+    });
+    $("#collection").click(function(){
+		if(user == null){
+			  alert("请先登录");
+			  location.href = "/home/login";
+		  }else{
+			  location.href = "/collection";
+		  }
+    });
+  </script>
+  </div>
+  
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.ISTopTwoMapper">
+  <resultMap type="com.dzkj.pojo.STopTwo" id="STopTwomap">
+    <id property="s_two_id" column="s_two_id"/>
+    <result property="s_one_id" column="s_one_id"/>
+    <result property="s_two_name" column="s_two_name"/>
+    <collection column="s_two_id" property="sThrees" ofType="com.dzkj.pojo.STopThree" select="com.dzkj.mapper.ISTopThreeMapper.checkthree">
+    </collection>
+  </resultMap>
+
+  <select id="checktwo" resultMap="STopTwomap">
+    select * from s_top_two where s_one_id=#{s_one_id}
+  </select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.IOrderaboutMapper">
+   <resultMap type="com.dzkj.pojo.Orderabout" id="orderaboutmap">
+      <id property="o_id" column="o_id"/>
+      <result property="o_bh" column="o_bh"/>
+      <result property="sc_number" column="sc_number"/>
+      <result property="sc_price" column="sc_price"/>
+      <association property="commodity" javaType="com.dzkj.pojo.Commodity">
+        <id property="s_id" column="s_id"/>
+        <result property="s_name" column="s_name"/>
+        <result property="s_price" column="s_price"/>
+        <result property="s_repertory" column="s_repertory"/>
+        <result property="s_sales" column="s_sales"/>
+        <result property="s_three_id" column="s_three_id"/>
+        <result property="s_url" column="s_url"/>
+        <result property="s_describe" column="s_describe"/>
+        <result property="s_brand" column="s_brand"/>
+      </association>
+   </resultMap>
+   <select id="findbyid" resultMap="orderaboutmap">
+     select * from orderabout a,commodity b where a.s_id=b.s_id and o_bh=#{o_bh}
+   </select>
+   <insert id="add">
+    insert into orderabout values(null,#{o_bh},#{commodity.s_id},#{sc_number},#{sc_price})
+   </insert>
+</mapper>

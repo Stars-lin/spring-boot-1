@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzkj.mapper.IShopcarMapper">
+   <resultMap type="com.dzkj.pojo.Shopcart" id="Shopcartmap">
+      <id property="id" column="id"/>
+      <result property="u_id" column="u_id"/>
+      <result property="sc_number" column="sc_number"/>
+      <result property="sc_price" column="sc_price"/>
+      <association property="commodity" javaType="com.dzkj.pojo.Commodity">
+        <id column="s_id" property="s_id"/>
+        <result column="s_name" property="s_name"/>
+        <result column="s_price" property="s_price"/>
+        <result column="s_repertory" property="s_repertory"/>
+        <result column="s_sales" property="s_sales"/>
+        <result column="s_three_id" property="s_three_id"/>
+        <result column="s_url" property="s_url"/>
+        <result column="s_describe" property="s_describe"/>
+        <result column="s_brand" property="s_brand"/>
+      </association>
+   </resultMap>
+   <!-- 添加购物车 -->
+   <insert id="add">
+     insert into shopcart values(null,#{u_id},#{commodity.s_id},#{sc_number},#{sc_price})
+   </insert>
+   <!-- 查找单条 -->
+   <select id="findone" resultMap="Shopcartmap">
+     select * from shopcart a,commodity b where a.s_id=#{commodity.s_id} and a.u_id=#{u_id} and a.s_id=b.s_id
+   </select>
+   <!-- 已存在购物车商品的修改 -->
+   <update id="upd">
+     update shopcart set sc_number=#{sc_number},sc_price=#{sc_price} where id=#{id}
+   </update>
+   <!-- 查询所有购物车的商品 -->
+   <select id="findall" resultMap="Shopcartmap">
+     select * from shopcart a,commodity b where a.u_id=#{u_id} and a.s_id=b.s_id
+   </select>
+   <!-- 删除 -->
+   <delete id="delone">
+     delete from shopcart where id=#{id}
+   </delete>
+   <!-- 根据id查单条 -->
+   <select id="findbyid" resultMap="Shopcartmap">
+     select * from shopcart a,commodity b where a.id=#{id} and a.s_id=b.s_id 
+   </select>
+</mapper>
